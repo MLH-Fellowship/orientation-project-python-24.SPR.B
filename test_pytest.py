@@ -12,7 +12,30 @@ def test_client():
     assert response.status_code == 200
     assert response.json['message'] == "Hello, World!"
 
+def test_put_experience():
+    example_experience = {
+        "title": "Software Developer",
+        "company": "A Cooler Company",
+        "start_date": "October 2022",
+        "end_date": "Present",
+        "description": "Writing JavaScript Code",
+        "logo": "example-logo.png"
+    }
+    updated_experience = {
+        "title": "Flask Dev",
+        "company": "The Coolest Company",
+        "start_date": "October 2023",
+        "end_date": "Present",
+        "description": "Writing Python Code",
+        "logo": "example-logo.png"
+    }
+    client = app.test_client()
+    client.post('/resume/experience', json=example_experience)
+    put_response = client.put('/resume/experience', json=updated_experience)
 
+    assert put_response.json == {'message': 'experience updated', 'updated_experience': updated_experience}
+    
+    
 def test_experience():
     '''
     Add a new experience and then get all experiences. 
@@ -27,11 +50,21 @@ def test_experience():
         "description": "Writing JavaScript Code",
         "logo": "example-logo.png"
     }
+    updated_experience = {
+        "title": "Flask Dev",
+        "company": "The Coolest Company",
+        "start_date": "October 2023",
+        "end_date": "Present",
+        "description": "Writing Python Code",
+        "logo": "example-logo.png"
+    }
 
     item_id = app.test_client().post('/resume/experience',
                                      json=example_experience).json['id']
     response = app.test_client().get('/resume/experience')
     assert response.json[item_id] == example_experience
+    
+    
 
 
 def test_education():
