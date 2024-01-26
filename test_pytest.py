@@ -1,12 +1,14 @@
 '''
-Tests in Pytest
+Tests for the Flask App using Pytest
 '''
+
 from app import app
 
 
 def test_client():
     '''
-    Makes a request and checks the message received is the same
+    Test to ensure that the app's test client responds with a 200 status code
+    and the expected message when making a GET request to /test endpoint.
     '''
     response = app.test_client().get('/test')
     assert response.status_code == 200
@@ -15,9 +17,8 @@ def test_client():
 
 def test_experience():
     '''
-    Add a new experience and then get all experiences. 
-    
-    Check that it returns the new experience in that list
+    Test to add a new experience, retrieve all experiences, and verify that the
+    new experience is present in the list.
     '''
     example_experience = {
         "title": "Software Developer",
@@ -28,17 +29,21 @@ def test_experience():
         "logo": "example-logo.png"
     }
 
+    # Add a new experience
     item_id = app.test_client().post('/resume/experience',
                                      json=example_experience).json['id']
+
+    # Retrieve all experiences
     response = app.test_client().get('/resume/experience')
+
+    # Check if the new experience is present in the list
     assert response.json[item_id] == example_experience
 
 
 def test_education():
     '''
-    Add a new education and then get all educations. 
-    
-    Check that it returns the new education in that list
+    Test to add a new education, retrieve all educations, and verify that the
+    new education is present in the list.
     '''
     example_education = {
         "course": "Engineering",
@@ -48,18 +53,22 @@ def test_education():
         "grade": "86%",
         "logo": "example-logo.png"
     }
+
+    # Add a new education
     item_id = app.test_client().post('/resume/education',
                                      json=example_education).json['id']
 
+    # Retrieve all educations
     response = app.test_client().get('/resume/education')
+
+    # Check if the new education is present in the list
     assert response.json[item_id] == example_education
 
 
 def test_skill():
     '''
-    Add a new skill and then get all skills. 
-    
-    Check that it returns the new skill in that list
+    Test to add a new skill, retrieve all skills, and verify that the
+    new skill is present in the list.
     '''
     example_skill = {
         "name": "JavaScript",
@@ -67,8 +76,12 @@ def test_skill():
         "logo": "example-logo.png"
     }
 
+    # Add a new skill
     item_id = app.test_client().post('/resume/skill',
                                      json=example_skill).json['id']
 
+    # Retrieve all skills
     response = app.test_client().get('/resume/skill')
+
+    # Check if the new skill is present in the list
     assert response.json[item_id] == example_skill
