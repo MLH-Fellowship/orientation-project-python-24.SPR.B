@@ -30,6 +30,9 @@ data = {
     ]
 }
 
+@app.route('/')
+def index():
+    return jsonify({'message':'Hi User'})
 
 @app.route('/test')
 def hello_world():
@@ -39,7 +42,7 @@ def hello_world():
     return jsonify({"message": "Hello, World!"})
 
 
-@app.route('/resume/experience', methods=['GET', 'POST'])
+@app.route('/resume/experience', methods=['GET', 'POST','PUT'])
 def experience():
     '''
     Handle experience requests
@@ -49,8 +52,25 @@ def experience():
 
     if request.method == 'POST':
         return jsonify({})
-
-    return jsonify({})
+    
+    if request.method == 'PUT':
+        experience = data['experience'][0]
+          
+        if 'title' in request.json:
+            experience.title = request.json['title']
+        if 'description' in request.json:
+            experience.description = request.json['description']
+        if 'company' in request.json:
+            experience.company = request.json['company']
+        if 'start_date' in request.json:
+            experience.start_date = request.json['start_date']
+        if 'end_date' in request.json:
+            experience.end_date = request.json['end_date']
+        if 'logo' in request.json:
+            experience.logo = request.json['logo']
+        
+        
+        return jsonify({'message':'experience updated','updated_experience':experience.__dict__})
 
 @app.route('/resume/education', methods=['GET', 'POST'])
 def education():
