@@ -72,9 +72,26 @@ def skill():
     Handles Skill requests
     '''
     if request.method == 'GET':
-        return jsonify({})
+        index = request.args.get('index')
+        if index is not None:
+            try:
+                index = int(index)
+                specific_skill = data["skill"][index]
+                return jsonify({"name": specific_skill.name, "proficiency": specific_skill.proficiency, "logo": specific_skill.logo})
+            except (IndexError, ValueError):
+                return jsonify({"error": "Invalid index provided"}), 400
+        else:
+            return jsonify([{"name": skill.name, "proficiency": skill.proficiency, "logo": skill.logo} for i, skill in enumerate(data["skill"])])
 
     if request.method == 'POST':
-        return jsonify({})
+        new_skill = {
+            "name": request.json.get("name"),
+            "proficiency": request.json.get("proficiency"),
+            "logo": request.json.get("logo")
+        }
+
+        skill_index = len(data["skill"])
+        data["skill"].append(Skill(**new_skill))
+        return jsonify({"id": skill_index})
 
     return jsonify({})
