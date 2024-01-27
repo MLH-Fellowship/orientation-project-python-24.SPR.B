@@ -80,6 +80,8 @@ def skill():
                 return jsonify({"name": specific_skill.name, "proficiency": specific_skill.proficiency, "logo": specific_skill.logo})
             except (IndexError, ValueError):
                 return jsonify({"error": "Invalid index provided"}), 400
+        else:
+            return jsonify([{"name": skill.name, "proficiency": skill.proficiency, "logo": skill.logo} for i, skill in enumerate(data["skill"])])
 
     if request.method == 'POST':
         new_skill = {
