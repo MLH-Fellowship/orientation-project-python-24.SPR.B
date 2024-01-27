@@ -75,6 +75,14 @@ def skill():
         return jsonify({})
 
     if request.method == 'POST':
-        return jsonify({})
+        new_skill = {
+            "name": request.json.get("name"),
+            "proficiency": request.json.get("proficiency"),
+            "logo": request.json.get("logo")
+        }
+
+        skill_index = len(data["skill"])
+        data["skill"].append(Skill(**new_skill))
+        return jsonify({"id": skill_index})
 
     return jsonify({})
