@@ -72,7 +72,7 @@ def skill():
     Handles Skill requests
     '''
     if request.method == 'GET':
-        return jsonify({})
+        return jsonify([skill.__dict__ for skill in data['skill']])
 
     if request.method == 'POST':
         return jsonify({})
