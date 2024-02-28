@@ -72,7 +72,13 @@ def skill():
     Handles Skill requests
     '''
     if request.method == 'GET':
-        return jsonify([skill.__dict__ for skill in data['skill']])
+        index = request.args.get('index')
+        if index is not None: 
+            index = int(index)
+            skill = data["skill"][index]
+            return jsonify({"name": skill.name, "proficiency": skill.proficiency, "logo": skill.logo})
+        else:
+            return jsonify([skill.__dict__ for skill in data['skill']])
 
     if request.method == 'POST':
         return jsonify({})
