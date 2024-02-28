@@ -52,6 +52,7 @@ def experience():
 
     return jsonify({})
 
+
 @app.route('/resume/education', methods=['GET', 'POST'])
 def education():
     '''
@@ -59,12 +60,18 @@ def education():
     '''
     if request.method == 'GET':
         index = request.args.get('index')
-        if index is not None: 
+        if index is not None:
             index = int(index)
-            skill = data["education"][index]
-            return jsonify({"course": skill.course, "school": skill.school, "start_date": skill.start_date, "end_date": skill.end_date, "grade": skill.grade, "logo": skill.logo})
-        else:
-            return jsonify({})
+            inner_education = data["education"][index]
+            return jsonify({
+                "course": inner_education.course,
+                "school": inner_education.school,
+                "start_date": inner_education.start_date,
+                "end_date": inner_education.end_date,
+                "grade": inner_education.grade,
+                "logo": inner_education.logo
+            })
+        return jsonify({})
 
     if request.method == 'POST':
         return jsonify({})
@@ -79,12 +86,15 @@ def skill():
     '''
     if request.method == 'GET':
         index = request.args.get('index')
-        if index is not None: 
+        if index is not None:
             index = int(index)
-            skill = data["skill"][index]
-            return jsonify({"name": skill.name, "proficiency": skill.proficiency, "logo": skill.logo})
-        else:
-            return jsonify([skill.__dict__ for skill in data['skill']])
+            inner_skill = data["skill"][index]
+            return jsonify({
+                "name": inner_skill.name,
+                "proficiency": inner_skill.proficiency,
+                "logo": inner_skill.logo
+            })
+        return jsonify([skill.__dict__ for skill in data['skill']])
 
     if request.method == 'POST':
         add_skill = {
