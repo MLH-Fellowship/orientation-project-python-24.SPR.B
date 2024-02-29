@@ -30,12 +30,12 @@ data = {
     ]
 }
 
-def validate_data(data, required_fields):
+def validate_data(req_data, required_fields):
     '''
     Validates the data
     '''
     for field in required_fields:
-        if field not in data:
+        if field not in req_data:
             return False
     return True
 

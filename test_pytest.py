@@ -10,15 +10,15 @@ def test_validate_data():
     '''
     invalid_experience_data = {"title": "Software Developer", "company": "A Cool Company"}
     response = app.test_client().post('/resume/experience', json=invalid_experience_data)
-    assert response.status_code == 400 
+    assert response.status_code == 400
 
     invalid_education_data = {"course": "Engineering", "school": "NYU"}
     response = app.test_client().post('/resume/education', json=invalid_education_data)
-    assert response.status_code == 400   
+    assert response.status_code == 400
 
     invalid_skill_data = {"name": "JavaScript"}
     response = app.test_client().post('/resume/skill', json=invalid_skill_data)
-    assert response.status_code == 400  
+    assert response.status_code == 400
 
 
 def test_client():
