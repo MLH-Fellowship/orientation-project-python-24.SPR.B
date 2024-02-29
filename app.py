@@ -62,18 +62,24 @@ def education():
 
     if request.method == 'POST':
         return jsonify({})
-    
+
     if request.method == 'PUT':
         index = request.args.get("index", type=int)
         if index is not None and 0 <= index < len(data["education"]):
             update_data = request.json
             # Update the education entry at the specified index
-            data["education"][index].course = update_data.get("course", data["education"][index].course)
-            data["education"][index].school = update_data.get("school", data["education"][index].school)
-            data["education"][index].start_date = update_data.get("start_date", data["education"][index].start_date)
-            data["education"][index].end_date = update_data.get("end_date", data["education"][index].end_date)
-            data["education"][index].grade = update_data.get("grade", data["education"][index].grade)
-            data["education"][index].logo = update_data.get("logo", data["education"][index].logo)
+            data["education"][index].course = \
+            update_data.get("course", data["education"][index].course)
+            data["education"][index].school = \
+            update_data.get("school", data["education"][index].school)
+            data["education"][index].start_date = \
+            update_data.get("start_date", data["education"][index].start_date)
+            data["education"][index].end_date = \
+            update_data.get("end_date", data["education"][index].end_date)
+            data["education"][index].grade = \
+            update_data.get("grade", data["education"][index].grade)
+            data["education"][index].logo = \
+            update_data.get("logo", data["education"][index].logo)
             return jsonify({"message": f"Education entry at index {index} updated successfully"})
         else:
             return jsonify({"error": "Invalid index for education entry"}), 400
