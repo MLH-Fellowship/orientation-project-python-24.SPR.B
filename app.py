@@ -61,7 +61,11 @@ def education():
         return jsonify({})
 
     if request.method == 'POST':
-        return jsonify({})
+        try:
+            data["education"].append(Education(**request.json)) 
+            return jsonify({ "id": len(data["education"]) - 1 })
+        except TypeError as valerror:
+            return str(valerror), 400
 
     return jsonify({})
 
