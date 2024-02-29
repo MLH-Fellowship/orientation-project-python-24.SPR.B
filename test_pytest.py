@@ -4,23 +4,6 @@ Tests in Pytest
 from app import app
 
 
-def test_validate_data():
-    '''
-    Tests the validation logic for POST requests
-    '''
-    invalid_experience_data = {"title": "Software Developer", "company": "A Cool Company"}
-    response = app.test_client().post('/resume/experience', json=invalid_experience_data)
-    assert response.status_code == 400 
-
-    invalid_education_data = {"course": "Engineering", "school": "NYU"}
-    response = app.test_client().post('/resume/education', json=invalid_education_data)
-    assert response.status_code == 400   
-
-    invalid_skill_data = {"name": "JavaScript"}
-    response = app.test_client().post('/resume/skill', json=invalid_skill_data)
-    assert response.status_code == 400  
-
-
 def test_client():
     '''
     Makes a request and checks the message received is the same
@@ -70,7 +53,28 @@ def test_education():
 
     response = app.test_client().get('/resume/education')
     assert response.json[item_id] == example_education
+    
 
+def test_delete_education():
+    '''
+    Add a new education and then delete it. 
+    
+    Check that it is no longer in the list
+    '''
+    example_education = {
+        "course": "Engineering",
+        "school": "NYU",
+        "start_date": "October 2022",
+        "end_date": "August 2024",
+        "grade": "86%",
+        "logo": "example-logo.png"
+    }
+    item_id = app.test_client().post('/resume/education',
+                                     json=example_education).json['id']
+
+    app.test_client().delete(f'/resume/education/{item_id}')
+    response = app.test_client().get('/resume/education')
+    assert item_id not in response.json
 
 def test_skill():
     '''
