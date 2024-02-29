@@ -1,7 +1,7 @@
 '''
 Flask Application
 '''
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request
 from models import Experience, Education, Skill
 
 app = Flask(__name__)
@@ -30,14 +30,6 @@ data = {
     ]
 }
 
-def validate_data(data, required_fields):
-    '''
-    Validates the data
-    '''
-    for field in required_fields:
-        if field not in data:
-            return False
-    return True
 
 @app.route('/test')
 def hello_world():
@@ -56,10 +48,6 @@ def experience():
         return jsonify({})
 
     if request.method == 'POST':
-        required_fields = ['title', 'company', 'start_date', 'end_date', 'description', 'logo']
-        if not validate_data(request.json, required_fields):
-            abort(400, description="Missing required fields in the request data")
-
         return jsonify({})
 
     return jsonify({})
@@ -73,9 +61,6 @@ def education():
         return jsonify({})
 
     if request.method == 'POST':
-        required_fields = ['course', 'school', 'start_date', 'end_date', 'grade', 'logo']
-        if not validate_data(request.json, required_fields):
-            abort(400, description="Missing required fields in the request data")
         return jsonify({})
 
     return jsonify({})
@@ -90,9 +75,6 @@ def skill():
         return jsonify({})
 
     if request.method == 'POST':
-        required_fields = ['name', 'proficiency', 'logo']
-        if not validate_data(request.json, required_fields):
-            abort(400, description="Missing required fields in the request data")
         return jsonify({})
 
     return jsonify({})
