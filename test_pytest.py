@@ -53,7 +53,7 @@ def test_education():
 
     response = app.test_client().get('/resume/education')
     assert response.json[item_id] == example_education
-    
+
 
 def test_delete_education():
     '''

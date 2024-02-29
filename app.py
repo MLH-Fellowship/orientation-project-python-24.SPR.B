@@ -62,12 +62,11 @@ def education():
 
     if request.method == 'POST':
         return jsonify({})
-    
+
     if request.method == 'DELETE':
         index = request.args.get("index", type=int)
         if index is not None and 0 <= index < len(data["education"]):
-            deleted_education = data["education"].pop(index)
-            return jsonify({"message": f"Education deleted successfully"})
+            return jsonify({"message": "Education deleted successfully"})
 
     return jsonify({})
 
