@@ -72,3 +72,27 @@ def test_skill():
 
     response = app.test_client().get('/resume/skill')
     assert response.json[item_id] == example_skill
+
+def test_spellcheck():
+    '''
+    Tests the spellcheck functionality
+    '''
+    data_entry = {
+        "title": "Softwere Develper",
+        "company": "A Cool Copany",
+        "start_date": "Octobr 2022",
+        "end_date": "Present",
+        "description": "Writing Python Codee",
+        "logo": "example-logo.png"
+    }
+
+    response = app.test_client().post('/spellcheck?category=experience&index=0', json=data_entry)
+    corrected_entry = response.json
+    
+    assert response.status_code == 200
+    assert corrected_entry["title"] == "Software Developer"
+    assert corrected_entry["company"] == "A Cool Company"
+    assert corrected_entry["start_date"] == "October 2022"
+    assert corrected_entry["end_date"] == "Present"
+    assert corrected_entry["description"] == "Writing Python Code"
+    assert corrected_entry["logo"] == "example-logo.png"
