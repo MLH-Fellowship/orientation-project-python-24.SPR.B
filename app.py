@@ -2,8 +2,8 @@
 Flask Application
 '''
 from flask import Flask, jsonify, request
-from models import Experience, Education, Skill
 from autocorrect import Speller
+from models import Experience, Education, Skill
 
 app = Flask(__name__)
 

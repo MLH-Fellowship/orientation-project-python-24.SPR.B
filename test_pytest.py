@@ -88,7 +88,7 @@ def test_spellcheck():
 
     response = app.test_client().post('/spellcheck?category=experience&index=0', json=data_entry)
     corrected_entry = response.json
-    
+
     assert response.status_code == 200
     assert corrected_entry["title"] == "Software Developer"
     assert corrected_entry["company"] == "A Cool Company"
