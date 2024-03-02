@@ -81,8 +81,6 @@ def education():
             data["education"][index].logo = \
             update_data.get("logo", data["education"][index].logo)
             return jsonify({"message": f"Education entry at index {index} updated successfully"})
-        else:
-            return jsonify({"error": "Invalid index for education entry"}), 400
 
     return jsonify({})
 
