@@ -64,7 +64,7 @@ def experience():
                                     new_experience_data["logo"])
         # Add the new experience to the data dictionary
         data["experience"].append(new_experience)
-        return jsonify({"message": "Experience added successfully"})
+        return jsonify({"id": "Experience added successfully"})
 
     return jsonify({})
 
