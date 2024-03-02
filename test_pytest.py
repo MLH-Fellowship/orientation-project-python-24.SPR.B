@@ -1,6 +1,7 @@
 '''
 Tests in Pytest
 '''
+from random import randint
 from app import app
 
 
@@ -15,8 +16,8 @@ def test_client():
 
 def test_experience():
     '''
-    Add a new experience and then get all experiences. 
-    
+    Add a new experience and then get all experiences.
+
     Check that it returns the new experience in that list
     '''
     example_experience = {
@@ -33,11 +34,29 @@ def test_experience():
     response = app.test_client().get('/resume/experience')
     assert response.json[item_id] == example_experience
 
+def test_delete_experience():
+    '''
+    Deletes experience and returns the id.
+
+    '''
+    test_experience_id = [randint(-10, 5) for _ in range(100)]
+
+    for test_id in test_experience_id:
+
+        response = app.test_client().delete("/resume/experience", json={"id": test_id})
+        response_status_code = response.status_code
+        print(response.json, test_id, type(response_status_code))
+
+        if response_status_code == 400:
+            assert response.json["id"] is None
+        elif response_status_code == 200:
+            assert response.json["id"] == test_id
+
 
 def test_education():
     '''
-    Add a new education and then get all educations. 
-    
+    Add a new education and then get all educations.
+
     Check that it returns the new education in that list
     '''
     example_education = {
@@ -57,8 +76,8 @@ def test_education():
 
 def test_skill():
     '''
-    Add a new skill and then get all skills. 
-    
+    Add a new skill and then get all skills.
+
     Check that it returns the new skill in that list
     '''
     example_skill = {

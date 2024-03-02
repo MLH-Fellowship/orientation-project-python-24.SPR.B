@@ -39,7 +39,7 @@ def hello_world():
     return jsonify({"message": "Hello, World!"})
 
 
-@app.route('/resume/experience', methods=['GET', 'POST'])
+@app.route('/resume/experience', methods=['GET', 'POST', "DELETE"])
 def experience():
     '''
     Handle experience requests
@@ -49,6 +49,18 @@ def experience():
 
     if request.method == 'POST':
         return jsonify({})
+
+    if request.method =="DELETE":
+        try:
+            experience_id = request.get_json(force=True)["id"]
+
+            if experience_id is not None and 0 <= experience_id < len(data["experience"]) :
+                data["experience"].pop(experience_id, )
+                return jsonify({"message": "Experience deleted", "id": experience_id}),200
+            return jsonify({"message":"No experience found", "id": None }),400
+        except  (KeyError, TypeError) :
+            return jsonify({"message":"No experience found", "id": None }),400
+
 
     return jsonify({})
 
