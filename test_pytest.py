@@ -210,6 +210,23 @@ def test_delete_education():
     assert item_id not in response.json
 
 
+def test_delete_skill():
+    """
+    Delete a skill using `id` if it exists.
+
+    """
+    skill_test_ids = [randint(-3, 4) for _ in range(100)]
+    print(skill_test_ids)
+
+    for test_id in skill_test_ids:
+        all_skills_count = len(app.test_client().get("/resume/skill").json)
+        response = app.test_client().delete(f"/resume/skill?id={test_id}")
+
+        if 0 <= test_id < all_skills_count:
+            assert response.status_code == 200
+            assert response.json.get("id") == test_id
+
+
 def test_skill():
     """
     Add a new skill and then get all skills.
