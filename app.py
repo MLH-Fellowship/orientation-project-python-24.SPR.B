@@ -45,6 +45,18 @@ def experience():
     Handle experience requests
     '''
     if request.method == 'GET':
+        index = request.args.get('index')
+        if index is not None:
+            index = int(index)
+            inner_experience = data["experience"][index]
+            return jsonify({
+                "title": inner_experience.title,
+                "company": inner_experience.company,
+                "start_date": inner_experience.start_date,
+                "end_date": inner_experience.end_date,
+                "description": inner_experience.description,
+                "logo": inner_experience.logo
+            })
         return jsonify()
 
     if request.method == 'POST':
