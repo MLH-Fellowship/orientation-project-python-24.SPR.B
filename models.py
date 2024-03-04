@@ -5,7 +5,6 @@ Models for the Resume API. Each class is related to
 """
 from re import match
 from dataclasses import dataclass
-from phonenumbers import parse, geocoder
 
 
 @dataclass
@@ -57,10 +56,10 @@ class Person:
     phone_number: str
     email: str
 
-    def get_country_from_phone(self):
-        """Attempts to fetch the country from the phone_number, using the international country code."""
-        parsed_phone_number = parse(self.phone_number)
-        return geocoder.description_for_number(parsed_phone_number, "en")
+    def is_number_in_international_format(self):
+        """Checks if the phone number adheres to international standard"""
+        pattern = "^\\+?[1-9][0-9]{7,14}$"
+        return match(pattern, self.phone_number) is not None
 
     def is_email_valid(self):
         """Returns True if the email provided is valid, otherwise False"""

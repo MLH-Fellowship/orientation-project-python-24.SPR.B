@@ -14,6 +14,60 @@ def test_client():
     assert response.json["message"] == "Hello, World!"
 
 
+def test_post_person():
+    """
+    Tests adding a person
+    """
+    person = {
+        "phone_number": "+2348100000000",
+        "email": "firstt@test.com",
+        "name": "Dave",
+    }
+
+    existing_person = (
+        app.test_client()
+        .get("/resume/person", headers={"content-type": "application/json"})
+        .json["data"]
+    )
+    if existing_person is None:
+        app.test_client().post(
+            "/resume/person", json=person, headers={"content-type": "application/json"}
+        )
+
+        new_person = (
+            app.test_client()
+            .get("/resume/person", headers={"content-type": "application/json"})
+            .json["data"]
+        )
+
+        assert new_person["name"] == person["name"]
+        assert new_person["name"] == person["name"]
+        assert new_person["phone_number"] == person["phone_number"]
+
+
+def test_put_person():
+    """
+    Tests updating a person if person exists, otherwise create person if person does not exists
+    """
+    person = {
+        "phone_number": "+2348100000001",
+        "email": "second@test.com",
+        "name": "John",
+    }
+
+    app.test_client().put("/resume/person", json=person)
+
+    new_person = (
+        app.test_client()
+        .get("/resume/person", headers={"content-type": "application/json"})
+        .json["data"]
+    )
+
+    assert new_person["name"] == person["name"]
+    assert new_person["name"] == person["name"]
+    assert new_person["phone_number"] == person["phone_number"]
+
+
 def test_experience():
     """
     Add a new experience and then get all experiences.
