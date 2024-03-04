@@ -162,7 +162,6 @@ def user():
             )
         data["person"] = person
         message = "Person added"
-        message = "Person added"
 
     if request.method == "GET":
         message = "Fetched user"
