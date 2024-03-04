@@ -137,7 +137,15 @@ def education():
     Handles education requests
     """
     if request.method == "GET":
-        return jsonify({})
+        index = request.values.get("id", None, type=int)
+        if (
+            index is not None
+            and isinstance(index, int)
+            and 0 <= index < len(data["education"])
+        ):
+            return jsonify({"id": index, "data": data["education"][index]})
+        elif index is None:
+            return jsonify({"data": data["education"], "id": None})
 
     if request.method == "POST":
         return jsonify({})
