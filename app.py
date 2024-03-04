@@ -38,6 +38,8 @@ data = {
         )
     ],
     "skill": [Skill("Python", "1-2 Years", "example-logo.png")],
+    "person":None
+
 }
 
 
@@ -116,6 +118,7 @@ def user():
         - GET
     """
 
+
     if request.method == "POST":
         person_exists = data["person"] is not None
 
@@ -127,7 +130,7 @@ def user():
         phone_number = request.json.get("phone_number")
 
         person = Person(name, phone_number, email)
-        message = ""
+        message= ""
         if not person.is_email_valid():
             return jsonify({"message": "Invalid email"}), 400
         if not person.is_number_in_international_format():
@@ -159,10 +162,12 @@ def user():
             )
         data["person"] = person
         message = "Person added"
+        message = "Person added"
 
     if request.method == "GET":
         message = "Fetched user"
     return jsonify({"message": message, "data": data["person"]})
+
 
 
 @app.route("/resume/education", methods=["GET", "POST"])
