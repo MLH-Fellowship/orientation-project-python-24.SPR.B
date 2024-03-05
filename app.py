@@ -102,7 +102,7 @@ def reorder_experience():
         if len(new_order) == len(data['experience']):
             data['experience'] = [data['experience'][idx] for idx in new_order]
             return jsonify({"message": "Experience reordered successfully"})
- 
+
     return jsonify({"message": "Invalid data provided"}), 400
 
 @app.route('/resume/education/reorder', methods=['POST'])
