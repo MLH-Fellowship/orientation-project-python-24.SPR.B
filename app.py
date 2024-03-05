@@ -2,9 +2,13 @@
 Flask Application
 '''
 from flask import Flask, jsonify, request
+from autocorrect import Speller
 from models import Experience, Education, Skill
 
 app = Flask(__name__)
+
+# Initialize the enchant dictionary
+spell = Speller()
 
 data = {
     "experience": [
@@ -45,10 +49,10 @@ def experience():
     Handle experience requests
     '''
     if request.method == 'GET':
-        return jsonify()
+        jsonify({})
 
     if request.method == 'POST':
-        return jsonify({})
+        jsonify({})
 
     return jsonify({})
 
@@ -78,3 +82,42 @@ def skill():
         return jsonify({})
 
     return jsonify({})
+
+@app.route('/spellcheck', methods=['POST'])
+def trigger_spellcheck():
+    '''
+    Spellcheck triggered by user from client. The user needs
+    to provide the category and index of the entry to be spellchecked
+    as query parameters. For example, /spellcheck?category=experience&index=0
+    '''
+    index = request.args.get('index')
+    category = request.args.get('category')
+
+    if category not in data:
+        return jsonify({"error": f"Category '{category}' not found"}), 400
+
+    entries = data[category]
+
+    try:
+        index = int(index)
+        entry = entries[index]
+    except (ValueError, IndexError):
+        return jsonify({"error": "Invalid index"}), 400
+
+    corrected_entry = spell_check_and_correct(entry)
+
+    return jsonify(corrected_entry)
+
+def spell_check_and_correct(entry):
+    '''
+    Uses autocorrect to perform spellcheck and update the data 
+    entry with the corrected words
+    '''
+    if hasattr(entry, '__dict__'):  # Check if the object has a __dict__ attribute
+        for attr_name, attr_value in vars(entry).items():
+            if isinstance(attr_value, str):
+                corrected_words = []
+                for word in attr_value.split():
+                    corrected_words.append(spell(word))
+            setattr(entry, attr_name, ' '.join(corrected_words))
+    return entry
