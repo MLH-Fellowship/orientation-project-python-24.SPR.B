@@ -54,6 +54,34 @@ def test_education():
     response = app.test_client().get('/resume/education')
     assert response.json[item_id] == example_education
 
+def test_update_education():
+    '''
+    Test updating an existing education entry using PUT request
+    '''
+    # Create new data to update the existing education entry
+    update_data = {
+        "course": "Updated Course Name",
+        "school": "Updated School Name",
+        "start_date": "Updated Start Date",
+        "end_date": "Updated End Date",
+        "grade": "Updated Grade",
+        "logo": "Updated Logo URL"
+    }
+    index = 0
+
+    response = app.test_client().put(f'/resume/education?index={index}', json=update_data)
+
+    assert response.status_code == 200
+    assert response.json["message"] == f"Education entry at index {index} updated successfully"
+
+    updated_education = app.test_client().get('/resume/education').json[index]
+    assert updated_education["course"] == update_data["course"]
+    assert updated_education["school"] == update_data["school"]
+    assert updated_education["start_date"] == update_data["start_date"]
+    assert updated_education["end_date"] == update_data["end_date"]
+    assert updated_education["grade"] == update_data["grade"]
+    assert updated_education["logo"] == update_data["logo"]
+
 
 def test_skill():
     '''
