@@ -77,7 +77,7 @@ def test_reorder_experience():
     '''
     Test reordering of experience section
     '''
-    new_order = [1, 0]  
+    new_order = [1, 0]
     response = app.test_client().post('/resume/experience/reorder', json={"order": new_order})
 
     assert response.status_code == 200
@@ -89,7 +89,7 @@ def test_reorder_education():
     '''
     Test reordering of education section
     '''
-    new_order = [1, 0]  
+    new_order = [1, 0]
     response = app.test_client().post('/resume/education/reorder', json={"order": new_order})
 
     assert response.status_code == 200
@@ -101,7 +101,7 @@ def test_reorder_skill():
     '''
     Test reordering of skill section
     '''
-    new_order = [1, 0] 
+    new_order = [1, 0]
     response = app.test_client().post('/resume/skill/reorder', json={"order": new_order})
 
     assert response.status_code == 200
