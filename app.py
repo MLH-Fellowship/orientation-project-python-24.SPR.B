@@ -64,7 +64,7 @@ def education():
     Handles education requests
     '''
     if request.method == 'GET':
-        return jsonify({})
+        return jsonify(data["education"])
 
     if request.method == 'POST':
         try:
