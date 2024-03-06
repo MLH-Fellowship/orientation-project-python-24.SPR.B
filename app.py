@@ -1,7 +1,7 @@
 '''
 Flask Application
 '''
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from autocorrect import Speller
 from models import Experience, Education, Skill
 
@@ -34,6 +34,14 @@ data = {
     ]
 }
 
+def validate_data(req_data, required_fields):
+    '''
+    Validates the data
+    '''
+    for field in required_fields:
+        if field not in req_data:
+            return False
+    return True
 
 @app.route('/test')
 def hello_world():

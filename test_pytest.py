@@ -5,6 +5,23 @@ from random import randint
 from app import app
 
 
+def test_validate_data():
+    '''
+    Tests the validation logic for POST requests
+    '''
+    invalid_experience_data = {"title": "Software Developer", "company": "A Cool Company"}
+    response = app.test_client().post('/resume/experience', json=invalid_experience_data)
+    assert response.status_code == 400
+
+    invalid_education_data = {"course": "Engineering", "school": "NYU"}
+    response = app.test_client().post('/resume/education', json=invalid_education_data)
+    assert response.status_code == 400
+
+    invalid_skill_data = {"name": "JavaScript"}
+    response = app.test_client().post('/resume/skill', json=invalid_skill_data)
+    assert response.status_code == 400
+
+
 def test_client():
     '''
     Makes a request and checks the message received is the same
