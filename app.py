@@ -140,3 +140,45 @@ def spell_check_and_correct(entry):
                     corrected_words.append(spell(word))
             setattr(entry, attr_name, ' '.join(corrected_words))
     return entry
+
+@app.route('/resume/experience/reorder', methods=['POST'])
+def reorder_experience():
+    '''
+    Handle reordering of experience section
+    '''
+    req_data = request.get_json()
+    if req_data and 'order' in req_data:
+        new_order = req_data['order']
+        if len(new_order) == len(data['experience']):
+            data['experience'] = [data['experience'][idx] for idx in new_order]
+            return jsonify({"message": "Experience reordered successfully"})
+
+    return jsonify({"message": "Invalid data provided"}), 400
+
+@app.route('/resume/education/reorder', methods=['POST'])
+def reorder_education():
+    '''
+    Handle reordering of education section
+    '''
+    req_data = request.get_json()
+    if req_data and 'order' in req_data:
+        new_order = req_data['order']
+        if len(new_order) == len(data['education']):
+            data['education'] = [data['education'][idx] for idx in new_order]
+            return jsonify({"message": "Education reordered successfully"})
+
+    return jsonify({"message": "Invalid data provided"}), 400
+
+@app.route('/resume/skill/reorder', methods=['POST'])
+def reorder_skill():
+    '''
+    Handle reordering of skill section
+    '''
+    req_data = request.get_json()
+    if req_data and 'order' in req_data:
+        new_order = req_data['order']
+        if len(new_order) == len(data['skill']):
+            data['skill'] = [data['skill'][idx] for idx in new_order]
+            return jsonify({"message": "Skill reordered successfully"})
+
+    return jsonify({"message": "Invalid data provided"}), 400

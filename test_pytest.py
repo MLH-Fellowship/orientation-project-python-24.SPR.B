@@ -124,3 +124,39 @@ def test_spellcheck():
     assert corrected_entry["end_date"] == "Present"
     assert corrected_entry["description"] == "Writing Python Code"
     assert corrected_entry["logo"] == "example-logo.png"
+
+def test_reorder_experience():
+    '''
+    Test reordering of experience section
+    '''
+    new_order = [1, 0]
+    response = app.test_client().post('/resume/experience/reorder', json={"order": new_order})
+
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['message'] == 'Experience reordered successfully'
+
+def test_reorder_education():
+    '''
+    Test reordering of education section
+    '''
+    new_order = [1, 0]
+    response = app.test_client().post('/resume/education/reorder', json={"order": new_order})
+
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['message'] == 'Education reordered successfully'
+
+def test_reorder_skill():
+    '''
+    Test reordering of skill section
+    '''
+    new_order = [1, 0]
+    response = app.test_client().post('/resume/skill/reorder', json={"order": new_order})
+
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['message'] == 'Skill reordered successfully'
