@@ -119,6 +119,27 @@ def test_update_education():
     assert updated_education["logo"] == update_data["logo"]
 
 
+def test_delete_education():
+    '''
+    Add a new education and then delete it. 
+    
+    Check that it is no longer in the list
+    '''
+    example_education = {
+        "course": "Engineering",
+        "school": "NYU",
+        "start_date": "October 2022",
+        "end_date": "August 2024",
+        "grade": "86%",
+        "logo": "example-logo.png"
+    }
+    item_id = app.test_client().post('/resume/education',
+                                     json=example_education).json['id']
+
+    app.test_client().delete(f'/resume/education/{item_id}')
+    response = app.test_client().get('/resume/education')
+    assert item_id not in response.json
+
 def test_skill():
     '''
     Add a new skill and then get all skills.
