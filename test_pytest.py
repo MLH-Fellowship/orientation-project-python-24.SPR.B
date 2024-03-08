@@ -2,6 +2,7 @@
 Tests in Pytest
 """
 
+from random import randint
 from app import app
 
 
@@ -123,7 +124,6 @@ def test_delete_experience():
 
         response = app.test_client().delete("/resume/experience", json={"id": test_id})
         response_status_code = response.status_code
-        print(response.json, test_id, type(response_status_code))
 
         if response_status_code == 400:
             assert response.json["id"] is None

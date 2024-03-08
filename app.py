@@ -87,7 +87,7 @@ def experience():
 
 
 @app.route("/resume/person", methods=["POST", "PUT", "GET"])
-def person():
+def user():
     """
     Handles person requests
     Allows creation and update of person.
@@ -96,16 +96,6 @@ def person():
         - PUT
         - GET
     """
-    if request.headers.get("Content-Type") != "application/json":
-        return (
-            jsonify(
-                {
-                    "message": "Unacceptable content-type",
-                    "content-type": request.headers.get("Content-Type"),
-                }
-            ),
-            400,
-        )
 
     if request.method == "POST":
         person_exists = data["person"] is not None
@@ -117,14 +107,8 @@ def person():
         email = request.json.get("email")
         phone_number = request.json.get("phone_number")
 
-        if not name or not email or not phone_number:
-            return (
-                {
-                    "message": "required body missing",
-                }
-            ), 400
-
         person = Person(name, phone_number, email)
+        message = ""
         if not person.is_email_valid():
             return jsonify({"message": "Invalid email"}), 400
         if not person.is_number_in_international_format():
@@ -136,8 +120,7 @@ def person():
             )
         person = Person(name, phone_number, email)
         data["person"] = person
-
-        return jsonify({"message": "Person added", "data": data["person"]})
+        message = "Person added"
 
     if request.method == "PUT":
 
@@ -156,10 +139,11 @@ def person():
                 400,
             )
         data["person"] = person
-        return jsonify({"message": "Person added", "data": data["person"]})
+        message = "Person added"
 
     if request.method == "GET":
-        return jsonify({"data": data["person"], "message": "Person"})
+        message = "Fetched user"
+    return jsonify({"message": message, "data": data["person"]})
 
 
 @app.route("/resume/education", methods=["GET", "POST"])
