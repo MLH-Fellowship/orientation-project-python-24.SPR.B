@@ -118,7 +118,6 @@ def user():
         - GET
     """
 
-
     if request.method == "POST":
         person_exists = data["person"] is not None
 
@@ -130,7 +129,7 @@ def user():
         phone_number = request.json.get("phone_number")
 
         person = Person(name, phone_number, email)
-        message= ""
+        message = ""
         if not person.is_email_valid():
             return jsonify({"message": "Invalid email"}), 400
         if not person.is_number_in_international_format():
@@ -168,14 +167,14 @@ def user():
     return jsonify({"message": message, "data": data["person"]})
 
 
-
-@app.route("/resume/education", methods=["GET", "POST"])
+@app.route("/resume/education", methods=["GET", "POST", "PUT", "DELETE"])
 def education():
     """
     Handles education requests
     """
-    if request.method == "GET":
-        index = request.args.get("index")
+
+    if request.method == 'GET':
+        index = request.args.get('index')
         if index is not None:
             index = int(index)
             inner_education = data["education"][index]
@@ -238,8 +237,9 @@ def skill():
     """
     Handles Skill requests
     """
-    if request.method == "GET":
-        index = request.args.get("index")
+
+    if request.method == 'GET':
+        index = request.args.get('index')
         if index is not None:
             index = int(index)
             inner_skill = data["skill"][index]
