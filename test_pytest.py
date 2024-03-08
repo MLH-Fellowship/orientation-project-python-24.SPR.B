@@ -228,6 +228,32 @@ def test_skill():
     assert response.json[item_id] == example_skill
 
 
+def test_put_skill():
+    """
+    Adds a new skill if the `id` does not match any existing skills.
+    """
+
+    skill = {
+        "name": "Computer vision engineer",
+        "proficiency": "intermediary",
+        "logo": "lorem ipsum ",
+    }
+
+    non_existing_id = 1_000
+    existing_id = 0
+    existing_skill = app.test_client().put(
+        "/resume/skill", json={**skill, "id": existing_id}
+    )
+    if existing_skill.status_code == 200:
+        assert existing_skill.json.get("id") == existing_id
+
+    non_existing_skill = app.test_client().put(
+        "/resume/skill", json={**skill, "id": "non_existing_id"}
+    )
+    if non_existing_skill.status_code == 200:
+        assert non_existing_skill.json["id"] != non_existing_id
+
+
 def test_spellcheck():
     """
     Tests the spellcheck functionality

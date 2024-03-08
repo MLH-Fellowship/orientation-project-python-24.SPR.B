@@ -258,6 +258,39 @@ def skill():
         data["skill"].append(Skill(**add_skill))
         return jsonify({"id": len(data["skill"]) - 1})
 
+    if request.method == "PUT":
+        valid_content_type = request.headers.get("Content-Type") == "application/json"
+        if not valid_content_type:
+            return ({"message": "Unsupported content-type"}), 400
+        request_body = request.json
+
+        skill_id = request_body.get("id")
+        new_skill = {
+            "name": request_body.get("name"),
+            "proficiency": request_body.get("proficiency"),
+            "logo": request_body.get("logo"),
+        }
+        skill_exists = skill_id is not None and 0 <= skill_id < len(data["skill"])
+
+        if skill_exists:
+            data["skill"][skill_id] = Skill(**new_skill)
+            return jsonify(
+                {
+                    "message": "Updated skill",
+                    "id": skill_id,
+                    "data": data["skill"][skill_id],
+                }
+            )
+        data["skill"].append(Skill(**new_skill))
+        new_skill_id = len(data["skill"]) - 1
+        return jsonify(
+            {
+                "message": "Added skill",
+                "id": new_skill_id,
+                "data": data["skill"][new_skill_id],
+            }
+        )
+
     return jsonify({})
 
 
