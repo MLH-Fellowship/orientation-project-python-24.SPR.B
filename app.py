@@ -38,6 +38,7 @@ data = {
         )
     ],
     "skill": [Skill("Python", "1-2 Years", "example-logo.png")],
+    "person": None
 }
 
 
