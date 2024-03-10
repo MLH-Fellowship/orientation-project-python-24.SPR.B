@@ -38,6 +38,7 @@ data = {
         )
     ],
     "skill": [Skill("Python", "1-2 Years", "example-logo.png")],
+    "person":None
 }
 
 
@@ -115,6 +116,8 @@ def user():
         - PUT
         - GET
     """
+    message = ""
+    error = False
 
     if request.method == "POST":
         person_exists = data["person"] is not None
@@ -126,20 +129,21 @@ def user():
         email = request.json.get("email")
         phone_number = request.json.get("phone_number")
 
-        person = Person(name, phone_number, email)
-        message = ""
-        if not person.is_email_valid():
-            return jsonify({"message": "Invalid email"}), 400
-        if not person.is_number_in_international_format():
-            return (
-                jsonify(
-                    {"message": "Phone number must be contain country code e.g. +86"}
-                ),
-                400,
+        new_person = Person(name, phone_number, email)
+        if not new_person.is_email_valid():
+            message = "Invalid email"
+            error = True
+
+        if not new_person.is_number_in_international_format():
+            message = (
+                "Phone number must be in international country code format: e.g. +86..."
             )
-        person = Person(name, phone_number, email)
-        data["person"] = person
-        message = "Person added"
+            error = True
+        if error:
+            return (jsonify({"message": message}), 400)
+        data["person"] = new_person
+
+        return jsonify({"message": "Person added", "data": data["person"]})
 
     if request.method == "PUT":
 
@@ -147,22 +151,27 @@ def user():
         email = request.json.get("email")
         phone_number = request.json.get("phone_number")
 
-        person = Person(name, phone_number, email)
-        if not person.is_email_valid():
-            return jsonify({"message": "Invalid email"}), 400
-        if not person.is_number_in_international_format():
-            return (
-                jsonify(
-                    {"message": "Phone number must be contain country code e.g. +86"}
-                ),
-                400,
+        new_person = Person(name, phone_number, email)
+        if not new_person.is_email_valid():
+            message = "Invalid email"
+            error = True
+
+        if not new_person.is_number_in_international_format():
+            message = (
+                "Phone number must be in international country code format: e.g. +86..."
             )
-        data["person"] = person
+            error = True
+        if error:
+            return (jsonify({"message": message}), 400)
+        data["person"] = new_person
+
+        data["person"] = new_person
         message = "Person added"
 
     if request.method == "GET":
-        message = "Fetched user"
-    return jsonify({"message": message, "data": data["person"]})
+        message = "Person"
+
+    return jsonify({"data": data["person"], "message": message})
 
 
 @app.route("/resume/education", methods=["GET", "POST"])
@@ -171,21 +180,15 @@ def education():
     Handles education requests
     """
     if request.method == "GET":
-        index = request.args.get("index")
-        if index is not None:
-            index = int(index)
-            inner_education = data["education"][index]
-            return jsonify(
-                {
-                    "course": inner_education.course,
-                    "school": inner_education.school,
-                    "start_date": inner_education.start_date,
-                    "end_date": inner_education.end_date,
-                    "grade": inner_education.grade,
-                    "logo": inner_education.logo,
-                }
-            )
-        return jsonify({})
+        index = request.values.get("id", None, type=int)
+        if (
+            index is not None
+            and isinstance(index, int)
+            and 0 <= index < len(data["education"])
+        ):
+            return jsonify({"id": index, "data": data["education"][index]})
+        if index is None:
+            return jsonify({"data": data["education"], "id": None})
 
     if request.method == "POST":
         try:
