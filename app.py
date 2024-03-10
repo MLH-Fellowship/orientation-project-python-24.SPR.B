@@ -1,10 +1,14 @@
 """
 Flask Application
 """
-
+import os
 from flask import Flask, jsonify, request
 from autocorrect import Speller
+from openai import OpenAI
+from dotenv import load_dotenv
 from models import Experience, Education, Skill, Person
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -59,8 +63,21 @@ def experience():
     """
     Handle experience requests
     """
-    if request.method == "GET":
+    if request.method == 'GET':
+        index = request.args.get('index')
+        if index is not None:
+            index = int(index)
+            inner_experience = data["experience"][index]
+            return jsonify({
+                "title": inner_experience.title,
+                "company": inner_experience.company,
+                "start_date": inner_experience.start_date,
+                "end_date": inner_experience.end_date,
+                "description": inner_experience.description,
+                "logo": inner_experience.logo
+            })
         return jsonify()
+
 
     if request.method == "POST":
         jsonify({})
@@ -326,3 +343,28 @@ def reorder_skill():
             return jsonify({"message": "Skill reordered successfully"})
 
     return jsonify({"message": "Invalid data provided"}), 400
+
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI()
+
+@app.route('/resume/get_chatgpt_suggestion', methods=['GET'])
+def get_chatgpt_suggestion():
+    """
+    Get a suggestion from OpenAI's GPT-3 model using the text suggestion
+    """
+    text_description = request.args.get('text_description')
+
+    if not text_description:
+        return jsonify({"error": "No text description provided"}), 400
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo-instruct",
+            messages=[{"role": "user", "content": text_description}],
+        )
+        if response.choices and response.choices[0].finish_reason == 'stop':
+            suggestion = response.choices[0].message['content']
+            return jsonify({"suggestion": suggestion}), 200
+        return jsonify({"error": "No suggestion was generated"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error: {e}"}), 500
